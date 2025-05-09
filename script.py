@@ -16,40 +16,25 @@ with open("ips.txt", "r") as file:
 
 for ip in ips:
     try:
-        if ip in ["192.168.137.6", "192.168.137.7"]:
-            device = {
-                "device_type":"cisco_ios",
-                "host":ip,
-                "username":USERNAME,
-                "password":PASSWORD,
-                "secret":SECRET
-            }
-            
-            print(f"Connecting to {ip}...")
+        device = {
+            "device_type":"cisco_ios",
+            "host": ip,
+            "username": USERNAME,
+            "password": PASSWORD,
+            "secret": SECRET
+        }
 
-            net_conn = ConnectHandler(**device)
-            net_conn.enable()
+        print(f"Connecting to {ip}...")
+        net_conn = ConnectHandler(**device)
+        net_conn.enable()
+        print("Connected successfully")
 
-            print("Connected successfullly")
+        output = net_conn.send_command("show run | include hostname")
+        print(output)
 
-            cmd = [
-                "int range g0/0-3, g1/0",
-                "switchport trunk enc dot1Q",
-                "switchport mode trunk",
-                "switchport trunk allowed vlan 10,20,30,40,99",
-                "end",
-                "write memory"
-            ]
-
-
-            output = net_conn.send_config_set(cmd)
-            time.sleep(1)
-            print(output)
-
-            net_conn.disconnect()
-        else:
-            print(f"{ip} not belongs to the configuration")
+        net_conn.disconnect()
     except NetMikoAuthenticationException:
-        print(f"Failed to authenticate to {ip}")
+        print(f"Failed to authenticate")
     except NetMikoTimeoutException:
-        print(f"Host unreachable")
+        print("Host unreachable")
+
