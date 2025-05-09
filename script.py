@@ -33,7 +33,7 @@ for ip in ips:
             print("Connected successfullly")
 
             cmd = [
-                "int range g0/1-3, g1/0",
+                "int range g0/0-3, g1/0",
                 "switchport trunk enc dot1Q",
                 "switchport mode trunk",
                 "switchport trunk allowed vlan 10,20,30,40,99",
