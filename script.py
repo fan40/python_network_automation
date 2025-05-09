@@ -15,7 +15,7 @@ with open("ips.txt", "r") as file:
     ips = [ip.strip() for ip in file.readlines()]
 
 for ip in ips:
-    if ip in ["192.168.137.6", "192.168.137.7"]:
+    if ip in ["192.168.137.8", "192.168.137.9", "192.168.137.10", "192.168.137.11"]:
         try:
             device = {
                 "device_type":"cisco_ios",
@@ -30,24 +30,14 @@ for ip in ips:
             net_conn.enable()
             print("Connected successfully")
 
-            if ip == "192.168.137.6":
-                cmd = [
-                "spanning-tree mode pvst",
-                "spanning-tree extend system-id",
-                "spanning-tree vlan 10 priority 24576",
-                "spanning-tree vlan 20 priority 24576",
-                "spanning-tree vlan 30 priority 28672",
-                "spanning-tree vlan 40 priority 28672"
-                    ]
-            else:
-                cmd = [
-                "spanning-tree mode pvst",
-                "spanning-tree extend system-id",
-                "spanning-tree vlan 30 priority 24576",
-                "spanning-tree vlan 40 priority 24576",
-                "spanning-tree vlan 10 priority 28672",
-                "spanning-tree vlan 20 priority 28672"
-                    ]
+            cmd = [
+                "interface range e0/0-1",
+                "switchport trunk enc dot1Q",
+                "switchport mode trunk",
+                "switchport trunk allowed vlan 10,20,30,40,99",
+                "end",
+                "wr mem"
+            ]
 
             output = net_conn.send_config_set(cmd)
             time.sleep(1)
