@@ -9,8 +9,8 @@ load_dotenv()
 local_path = "dhcpd.conf"
 remote_path = "/etc/dhcp/dhcpd.conf"
 
-USERNAME= os.getenv("USERNAME")
-PASSWORD= os.getenv("SERVER")
+USERNAME= os.getenv("SERV_USER")
+PASSWORD= os.getenv("SERV_USER")
 HOST="192.168.137.14"
 
 client = paramiko.SSHClient()
