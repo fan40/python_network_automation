@@ -1,4 +1,4 @@
-# 🔧 Network Automation Project with Python & Netmiko
+# 🔧 Network Automation Project with Python & Netmiko and Paramiko and monitoring using Grafana + Promotheus(snmp_exporter)
 
 ![Network Topology](topology/lab.png)
 
