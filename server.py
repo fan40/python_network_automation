@@ -6,12 +6,12 @@ import time
 
 load_dotenv()
 
-local_path = "dhcpd.conf"
-remote_path = "/etc/dhcp/dhcpd.conf"
+local_path = "config_server/dns.conf"
+remote_path = "/etc/bind/db.lab.local"
 
 USERNAME= os.getenv("SERV_USER")
 PASSWORD= os.getenv("SERV_USER")
-HOST="192.168.137.14"
+HOST="192.168.137.13"
 
 client = paramiko.SSHClient()
 
@@ -27,7 +27,7 @@ sftp = client.open_sftp()
 
 sftp.put(localpath=local_path, remotepath=remote_path)
 
-print("Configuration DHCP términée")
+print("Configuration DNS términée")
 
 sftp.close()
 client.close()
