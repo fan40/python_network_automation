@@ -15,7 +15,9 @@ with open("ips.txt", "r") as file:
     ips = [ip.strip() for ip in file.readlines()]
 
 for ip in ips:
-    if ip in ["192.168.137.8", "192.168.137.9", "192.168.137.10", "192.168.137.11"]:
+    if ip in ["192.168.137.12", "192.168.137.13", "192.168.137.14"]:
+        print(f"{ip} doesnt belong to the configuration")
+    else:
         try:
             device = {
                 "device_type":"cisco_ios",
@@ -30,33 +32,24 @@ for ip in ips:
             net_conn.enable()
             print("Connected successfully")
 
-            cmd = [
-                "interface e0/2",
-                "switchport mode access",
-                "switchport access vlan 10",
-                "exit",
-                "interface e0/3",
-                "switchport mode access",
-                "switchport access vlan 20",
-                "exit",
-                "interface e1/0",
-                "switchport mode access",
-                "switchport access vlan 30",
-                "exit",
-                "interface e1/1",
-                "switchport mode access",
-                "switchport access vlan 40",
-                "end"
-            ]
 
-            output = net_conn.send_config_set(cmd)
-            time.sleep(1)
+            hostname = net_conn.send_command("show running-config | include hostname")
+            output = net_conn.send_command("terminal length 0")
             print(output)
+
+            backup = net_conn.send_command("show run")
+            time.sleep(2)
+
+            print(backup)
+
+            with open(f"config_equipement/{hostname.split()[1]}.backup", "w") as file:
+                file.write(backup)
+            
+            print(f"Backup {hostname.split()[1]} fait.")
+
 
             net_conn.disconnect()
         except NetMikoAuthenticationException:
             print(f"Failed to authenticate")
         except NetMikoTimeoutException:
             print("Host unreachable")
-    else:
-        print(f"{ip} dont belongs to the configuration")
