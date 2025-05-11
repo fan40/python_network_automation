@@ -1,15 +1,15 @@
 #!/home/faneva/Bureau/Networking/nenv/bin/python
 
 from netmiko import ConnectHandler, NetMikoAuthenticationException, NetMikoTimeoutException
-from dotenv import load_dotenv
 import time
+from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-USERNAME = os.getenv("USERNAME")
-PASSWORD = os.getenv("PASSWORD")
-SECRET = os.getenv("SECRET")
+USERNAME = os.getenv("NET_USER")
+PASSWORD = os.getenv("NET_PASSWORD")
+SECRET = os.getenv("NET_SECRET")
 
 with open("ips.txt", "r") as file:
     ips = [ip.strip() for ip in file.readlines()]
@@ -19,10 +19,10 @@ for ip in ips:
         try:
             device = {
                 "device_type":"cisco_ios",
-                "host": ip,
-                "username": USERNAME,
-                "password": PASSWORD,
-                "secret": SECRET
+                "host":ip,
+                "username":USERNAME,
+                "password":PASSWORD,
+                "secret":SECRET
             }
 
             print(f"Connecting to {ip}...")
@@ -31,12 +31,22 @@ for ip in ips:
             print("Connected successfully")
 
             cmd = [
-                "interface range e0/0-1",
-                "switchport trunk enc dot1Q",
-                "switchport mode trunk",
-                "switchport trunk allowed vlan 10,20,30,40,99",
-                "end",
-                "wr mem"
+                "interface e0/2",
+                "switchport mode access",
+                "switchport access vlan 10",
+                "exit",
+                "interface e0/3",
+                "switchport mode access",
+                "switchport access vlan 20",
+                "exit",
+                "interface e1/0",
+                "switchport mode access",
+                "switchport access vlan 30",
+                "exit",
+                "interface e1/1",
+                "switchport mode access",
+                "switchport access vlan 40",
+                "end"
             ]
 
             output = net_conn.send_config_set(cmd)
@@ -49,5 +59,4 @@ for ip in ips:
         except NetMikoTimeoutException:
             print("Host unreachable")
     else:
-        print(f"{ip} is not belongs the configuration")
-
+        print(f"{ip} dont belongs to the configuration")
