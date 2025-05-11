@@ -28,8 +28,8 @@ This is a personal project simulating a real-world enterprise network using **GN
 
 ## 📁 Project Structure
 
-- `script.py`: main automation script
-- `automation/`: Python scripts for specific tasks
+- `script.py`: main automation script for R1 to S7
+- `server.py`: main automation script for servers
 - `topology/lab.png`: image and description of the lab
 - `config_equipement/`: backup for each equipment
 - `config_server/`: backup for DHCP,DNS
